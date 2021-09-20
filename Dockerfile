@@ -106,6 +106,15 @@ RUN cd /home/docker/ && echo "source /opt/ros/melodic/setup.bash" >> .bashrc
 
 RUN cd /home/docker/ && mkdir -p .ignition/fuel/ 
 COPY --chown=docker:docker ./config_files/config.yaml .ignition/fuel/
-#RUN apt-get update && apt-get upgrade -y
+
+# Additional deps
+RUN sudo apt-get update && \
+	sudo apt-get install -y ros-melodic-teb-local-planner \
+			ros-melodic-ros-control \
+			ros-melodic-ros-controllers \
+			ros-melodic-joint-state-publisher-gui \
+			ros-melodic-teleop-twist-keyboard && \
+	rm -rf /var/lib/apt/lists/*
+RUN sudo apt-get update && sudo apt-get upgrade -y
 
 ENTRYPOINT ["/startup.sh"]
